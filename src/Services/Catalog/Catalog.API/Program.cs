@@ -2,11 +2,14 @@ using BuildingBlocks.PipelineBehaviors;
 using BuildingBlocks.Exceptions.Handler;
 using BuildingBlocks.Extentions;
 using Catalog.API.Data;
+using HealthChecks.UI.Client;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to container
 var assembly = typeof(Program).Assembly;
+var connectionString = builder.Configuration.GetConnectionString("Database")!;
 
 builder.Services.AddCarterWithAssemblies(assembly);
 builder.Services.AddMediatR(config =>
@@ -19,12 +22,14 @@ builder.Services.AddValidatorsFromAssembly(assembly);
 
 builder.Services.AddMarten(opts =>
 {
-    opts.Connection(builder.Configuration.GetConnectionString("Database")!);
+    opts.Connection(connectionString);
 }).UseLightweightSessions();
 if (builder.Environment.IsDevelopment())
     builder.Services.InitializeMartenWith<CatalogInitialData>();
 
 builder.Services.AddExceptionHandler<CustomExceptionHandler>();
+
+builder.Services.AddHealthChecks().AddNpgSql(connectionString);
 
 var app = builder.Build();
 
@@ -38,6 +43,10 @@ app.MapCarter();
 //});
 app.UseExceptionHandler(options => { });
 
-
+app.UseHealthChecks("/health",
+    new HealthCheckOptions
+    {
+        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+    });
 
 app.Run();
