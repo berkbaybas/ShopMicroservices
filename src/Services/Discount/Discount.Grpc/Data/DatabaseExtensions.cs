@@ -2,7 +2,7 @@
 
 namespace Discount.Grpc.Data
 {
-    public static class DiscountSeed
+    public static class DatabaseExtensions
     {
         public static IApplicationBuilder UseMigration(this IApplicationBuilder app)
         {
