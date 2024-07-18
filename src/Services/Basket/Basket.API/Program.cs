@@ -5,12 +5,13 @@ using BuildingBlocks.PipelineBehaviors;
 using Discount.Grpc;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using BuildingBlocks.Messaging.MassTransit;
 
 var builder = WebApplication.CreateBuilder(args);
 
 var assembly = typeof(Program).Assembly;
 var connectionStringPostgre = builder.Configuration.GetConnectionString("Database")!;
-var connectionStringRedis = builder.Configuration.GetConnectionString("Database")!;
+var connectionStringRedis = builder.Configuration.GetConnectionString("Redis")!;
 
 //Application Services
 builder.Services.AddCarterWithAssemblies(assembly);
@@ -53,6 +54,8 @@ builder.Services.AddGrpcClient<DiscountProtoService.DiscountProtoServiceClient>(
     return handler;
 });
 
+//Async Communication Services
+builder.Services.AddMessageBroker(builder.Configuration);
 
 //Cross-Cutting Services
 builder.Services.AddExceptionHandler<CustomExceptionHandler>();

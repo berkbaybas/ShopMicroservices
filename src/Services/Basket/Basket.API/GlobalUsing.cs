@@ -4,3 +4,4 @@ global using MediatR;
 global using Marten;
 global using FluentValidation;
 global using Basket.API.Exceptions;
+global using Basket.API.Dtos;

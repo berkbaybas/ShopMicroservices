@@ -13,6 +13,7 @@
     <PackageReference Include="Mapster" Version="7.4.0" />
     <PackageReference Include="MediatR" Version="12.2.0" />
 	<PackageReference Include="Carter" Version="8.2.0" />
+	<PackageReference Include="Microsoft.FeatureManagement.AspNetCore" Version="3.4.0" />
   </ItemGroup>
 
 </Project>
