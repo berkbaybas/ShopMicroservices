@@ -4,12 +4,16 @@ using BuildingBlocks.Extentions;
 using Catalog.API.Data;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Serilog;
+using BuildingBlocks.Logging;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to container
 var assembly = typeof(Program).Assembly;
 var connectionString = builder.Configuration.GetConnectionString("Database")!;
+
+builder.Host.UseSerilog(SeriLogger.Configure);
 
 builder.Services.AddCarterWithAssemblies(assembly);
 builder.Services.AddMediatR(config =>

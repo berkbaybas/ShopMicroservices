@@ -37,7 +37,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BuildingBlocks.Messaging", 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ApiGateways", "ApiGateways", "{5913A9D8-C678-42DC-861B-1F5548C2B017}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YarpApiGateway", "ApiGateways\YarpApiGateway\YarpApiGateway.csproj", "{B4228782-1432-428C-9A4B-206F28A8DC8C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YarpApiGateway", "ApiGateways\YarpApiGateway\YarpApiGateway.csproj", "{B4228782-1432-428C-9A4B-206F28A8DC8C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuildingBlocks.Logging", "BuildingBlocks\BuildingBlocks.Logging\BuildingBlocks.Logging.csproj", "{0E702C18-F9C3-4187-825C-C192A49C97EB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -89,6 +91,10 @@ Global
 		{B4228782-1432-428C-9A4B-206F28A8DC8C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B4228782-1432-428C-9A4B-206F28A8DC8C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B4228782-1432-428C-9A4B-206F28A8DC8C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0E702C18-F9C3-4187-825C-C192A49C97EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0E702C18-F9C3-4187-825C-C192A49C97EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0E702C18-F9C3-4187-825C-C192A49C97EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0E702C18-F9C3-4187-825C-C192A49C97EB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -108,6 +114,7 @@ Global
 		{70145486-8EB7-47C1-992F-85C48A0AC5AA} = {5DE92475-E5BF-40E9-842F-9617DB29CB24}
 		{67B9D34A-2A20-4C91-8CA9-4FF20EA88AF5} = {571713CB-2EAB-4196-87D4-5DD4D75B5296}
 		{B4228782-1432-428C-9A4B-206F28A8DC8C} = {5913A9D8-C678-42DC-861B-1F5548C2B017}
+		{0E702C18-F9C3-4187-825C-C192A49C97EB} = {571713CB-2EAB-4196-87D4-5DD4D75B5296}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2A9D206C-C0B1-4E26-A27A-94EB7A28EAA3}

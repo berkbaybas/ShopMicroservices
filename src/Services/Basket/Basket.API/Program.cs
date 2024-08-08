@@ -6,12 +6,16 @@ using Discount.Grpc;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using BuildingBlocks.Messaging.MassTransit;
+using BuildingBlocks.Logging;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
 var assembly = typeof(Program).Assembly;
 var connectionStringPostgre = builder.Configuration.GetConnectionString("Database")!;
 var connectionStringRedis = builder.Configuration.GetConnectionString("Redis")!;
+
+builder.Host.UseSerilog(SeriLogger.Configure);
 
 //Application Services
 builder.Services.AddCarterWithAssemblies(assembly);

@@ -13,6 +13,8 @@ namespace Catalog.API.Products.GetProducts
         {
             var products = await session.Query<Product>().ToPagedListAsync(query.pageNumber ?? 1, query.pageSize ?? 5, cancellationToken);
 
+            logger.LogInformation("Get product in db");
+
             return new GetProductsResult(products);
         }
     }
