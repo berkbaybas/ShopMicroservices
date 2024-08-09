@@ -78,6 +78,7 @@ services:
       - MessageBroker__Host=amqp://ecommerce-mq:5672
       - MessageBroker__UserName=guest
       - MessageBroker__Password=guest
+      - "ElasticConfiguration:Uri=http://elasticsearch:9200"
     ports:
       - "6001:8080"
       - "6061:8081"
@@ -96,6 +97,7 @@ services:
       - ASPNETCORE_HTTP_PORTS=8080
       - ASPNETCORE_HTTPS_PORTS=8081
       - ConnectionStrings__Database=Data Source=discountdb
+      - "ElasticConfiguration:Uri=http://elasticsearch:9200"
     ports:
       - "6002:8080"
       - "6062:8081"
@@ -113,6 +115,7 @@ services:
       - MessageBroker__UserName=guest
       - MessageBroker__Password=guest
       - FeatureManagement__OrderFullfilment=false
+      - "ElasticConfiguration:Uri=http://elasticsearch:9200"
     depends_on:
       - orderdb
       - messagebroker
@@ -128,6 +131,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=8080
       - ASPNETCORE_HTTPS_PORTS=8081
+      - "ElasticConfiguration:Uri=http://elasticsearch:9200"
     depends_on:
       - catalog.api
       - basket.api
