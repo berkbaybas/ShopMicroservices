@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.Data.Sqlite;
+using Microsoft.EntityFrameworkCore;
+using Polly;
 
 namespace Discount.Grpc.Data
 {
@@ -8,7 +10,19 @@ namespace Discount.Grpc.Data
         {
             using var scope = app.ApplicationServices.CreateScope();
             using var dbContext = scope.ServiceProvider.GetRequiredService<DiscountContext>();
-            dbContext.Database.MigrateAsync();
+            var logger = scope.ServiceProvider.GetRequiredService<ILogger<DiscountContext>>();
+
+
+            var retry = Policy.Handle<SqliteException>()
+                               .WaitAndRetry(
+                                   retryCount: 5,
+                                   sleepDurationProvider: retryAttemp => TimeSpan.FromSeconds(Math.Pow(2, retryAttemp)),
+                                   onRetry: (exception, retryCount, context) =>
+                                   {
+                                       logger.LogError($"Retry {retryCount} of {context.PolicyKey} at {context.OperationKey}, due to: {exception}.");
+                                   });
+
+            retry.Execute(() => { dbContext.Database.Migrate(); });
 
             return app;
         }

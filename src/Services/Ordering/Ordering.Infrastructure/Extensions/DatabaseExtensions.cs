@@ -1,10 +1,14 @@
 ﻿
+using MediatR;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Ordering.Domain.Models;
 using Ordering.Domain.ValueObjects;
 using Ordering.Infrastructure.Data;
+using Polly;
 
 namespace Ordering.Infrastructure.Extensions
 {
@@ -13,13 +17,35 @@ namespace Ordering.Infrastructure.Extensions
         public static async Task InitializeDatabaseAsync(this WebApplication app)
         {
             using var scope = app.Services.CreateScope();
-
             var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+            var logger = app.Services.GetRequiredService<ILogger<ApplicationDbContext>>();
 
-            context.Database.MigrateAsync().GetAwaiter().GetResult();
+            try
+            {
+                var retry = Policy.Handle<SqlException>()
+                                  .WaitAndRetryAsync(
+                                      retryCount: 5,
+                                      sleepDurationProvider: retryAttemp => TimeSpan.FromSeconds(Math.Pow(2, retryAttemp)),
+                                      onRetry: (exception, retryCount, context) =>
+                                      {
+                                          logger.LogError($"Retry {retryCount} of {context.PolicyKey} at {context.OperationKey}, due to: {exception}.");
+                                      });
 
-            await SeedAsync(context);
+                await retry.ExecuteAsync(async () =>
+                {
+                    context.Database.MigrateAsync().GetAwaiter().GetResult();
+                    await SeedAsync(context);
+                });
+
+                logger.LogInformation("Migrated database associated with context {DbContextName}", typeof(ApplicationDbContext).Name);
+            }
+            catch (SqlException ex)
+            {
+                logger.LogError(ex, "An error occurred while migrating the database used on context {DbContextName}", typeof(ApplicationDbContext).Name);
+            }
+
         }
+
         private static async Task SeedAsync(ApplicationDbContext context)
         {
             await SeedCustomerAsync(context);
